@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Sat Apr 05 00:56:53 EDT 2014
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=JSudoku2014.jar
+manifest.mergeall=true
+manifest.mainclass=jSudoku.Judoku
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<po|JSudoku2014>~.settings/;<po|JSudoku2014>~untitled folder/;<po|JSudoku2014>~.DS_Store;<po|JSudoku2014>~appdesc copy.txt;<po|JSudoku2014>~appdesc2.txt;<po|JSudoku2014>~JSudoku2014.jar;<po|JSudoku2014>~logoUndo.png;<po|JSudoku2014>~makerLogo.png;<po|JSudoku2014>~UndoManager.png
+includes=
