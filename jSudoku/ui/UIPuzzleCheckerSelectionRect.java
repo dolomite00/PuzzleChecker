@@ -22,6 +22,8 @@ public class UIPuzzleCheckerSelectionRect extends UISelectionRect{
 	
 	protected static final long serialVersionUID = 1;
 
+	private final static Color RED = new Color(185,0,0);
+	
 // ******************************************************************************
 //
 // constructor
@@ -53,8 +55,16 @@ public class UIPuzzleCheckerSelectionRect extends UISelectionRect{
 			}
 
 			if (key >= KeyEvent.VK_1 && key <= KeyEvent.VK_9 ) {
-				GridBoardController.setSelectedCellValue(DMPuzzle.getPuzzle(), key);
+				int color = -1;
+				if (controller.getUserColor() == Color.RED)
+					color = 1;
+				else if (controller.getUserColor() == Color.CYAN)
+					color = 2;
+				else if (controller.getUserColor() == Color.GREEN)
+					color = 3;
+				GridBoardController.setSelectedCellValue(DMPuzzle.getPuzzle(), key, color);
 			}
+			controller.CheckBoard();			
 			repaint();
 		}
 		
@@ -138,9 +148,9 @@ public class UIPuzzleCheckerSelectionRect extends UISelectionRect{
 			for (DMCell cell : row) {
 				Rectangle rect = cell.getRect();
 				if (cell.isConflict() && !cell.isFixedCell()) 
-					g.setColor(Color.red);
+					g.setColor(RED);
 				else if (!cell.isFixedCell() && cell.isFilled() && cell.isCorrect())
-					g.setColor(Color.green);
+					g.setColor(Color.white);
 				else if (!cell.isFixedCell() && cell.isFilled() && !cell.isCorrect())
 					g.setColor(Color.pink);
 				else
@@ -173,7 +183,15 @@ public class UIPuzzleCheckerSelectionRect extends UISelectionRect{
 			g2.setColor(Color.BLACK);
 			g2.setFont(fixedCellFont);
 		} else {
-			g2.setColor(Color.BLUE);
+			
+			if (cell.getColorCode() == 1)
+				g2.setColor(Color.MAGENTA);
+			else if (cell.getColorCode() == 2)
+				g2.setColor(Color.BLUE);
+			else if (cell.getColorCode() == 3)
+				g2.setColor(Color.GREEN);
+			else
+				g2.setColor(Color.GRAY);
 			g2.setFont(fixedEntryFont);
 		}
 		

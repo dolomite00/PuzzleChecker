@@ -1,64 +1,12 @@
 package jSudoku.ui;
 
-/**
- * Copyright 2008, POET Lab (Dr. Deborah Tatar) @ Virginia Tech, Blacksburg, VA
- *
- * Permission to use and modify this software and its documentation for
- * any purpose other than its incorporation into a commercial product is
- * hereby granted without fee.  Permission to copy and distribute this
- * software and its documentation only for non-commercial use is also
- * granted without fee, provided, however, that the above copyright notice
- * appear in all copies, that both that copyright notice and this permission
- * notice appear in supporting documentation, that the name of POET Lab 
- * (Dr. Deborah Tatar) not be used in advertising or publicity pertaining to
- * distribution of the software without specific, written prior permission,
- * and that the person doing the distribution notify POET Lab (Dr. Deborah Tatar) of
- * such distributions outside of his or her organization. POET Lab (Dr. Deborah Tatar)
- * makes no representations about the suitability of this software for
- * any purpose.  It is provided "as is" without express or implied warranty.
- * POET Lab (Dr. Deborah Tatar) requests notification of any modifications to this
- * software or its documentation.
- *
- * Send the following redistribution information:
- *
- *      Name:
- *      Organization:
- *      Address (postal and/or electronic):
- *
- * To:
- *      Dr. Deborah Tatar
- *      Computer Science Department
- *      Virginia Polytechnic Institute and State University
- *      Blacksburg, VA 24061
- *
- *      Joon Suk Lee
- *      Computer Science Department
- *      Virginia Polytechnic Institute and State University
- *      Blacksburg, VA 24061
- *
- *              or
- *
- *		tatar@cs.vt.edu
- *      joonlee@vt.edu
- *
- * We will acknowledge all electronic notifications.
- */
-
-/**
- * 
- * @author: dolomite
- * File: UIPuzzleCheckerWindow.java
- * Project: Judoku
- * Date: 11/2012
- * Synopsis: Puzzle Checker Window UI.
- *  
- */
-
 import jSudoku.*;
 import jSudoku.control.GridBoardController;
 import jSudoku.model.*;
+import jSudoku.util.screen2image;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -88,6 +36,8 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 	static final long serialVersionUID = 1;
 	
 	public  static Image PROGRAM_ICON_IMG = null;
+	
+	private Color userColor = Color.RED;
 	
 // ******************************************************************************
 //
@@ -179,20 +129,32 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 		jPuzzleMenuBar			= new JMenuBar();
 		
 		jMenuFile			= new JMenu();
+		jMenuPlayerColor	= new JMenu();
 		
 		jMenuItemNew 		= new JMenuItem();
 		jMenuItemOpenFile	= new JMenuItem();
 		jMenuItemClose		= new JMenuItem();
 		jMenuItemBoardCheck	= new JMenuItem();
+		jMenuItemCapture	= new JMenuItem();
 		jMenuItemExit		= new JMenuItem();
 		
+		jMenuItemRed		= new JMenuItem();
+		jMenuItemBlue		= new JMenuItem();
+		jMenuItemGreen		= new JMenuItem();
+		
 		jMenuFile.setText("Game");
+		jMenuPlayerColor.setText("Player Color");
 		
 		jMenuItemNew.setText("New...");	
 		jMenuItemOpenFile.setText("Open File...");
 		jMenuItemClose.setText("Close");
 		jMenuItemBoardCheck.setText("Check Board");	
+		jMenuItemCapture.setText("Capture");	
 		jMenuItemExit.setText("Exit");
+
+		jMenuItemRed.setText("Red");
+		jMenuItemBlue.setText("Blue");
+		jMenuItemGreen.setText("Green");
 
 		jMenuItemNew.setIcon(buildIcon(CONSTVALUE.FILENEW_ICON));
 		jMenuItemOpenFile.setIcon(buildIcon(CONSTVALUE.FILEOPEN_ICON));
@@ -208,6 +170,30 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 		jMenuItemBoardCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				performCheckBoard(evt);
+			}
+		});
+
+		jMenuItemCapture.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				performCapture(evt);
+			}
+		});
+
+		jMenuItemRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				performRed(evt);
+			}
+		});
+
+		jMenuItemBlue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				performBlue(evt);
+			}
+		});
+
+		jMenuItemGreen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				performGreen(evt);
 			}
 		});
 
@@ -235,10 +221,19 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 		jMenuFile.add(jMenuItemClose);
 		jMenuFile.add(new JSeparator());
 		jMenuFile.add(jMenuItemBoardCheck);
+		jMenuFile.add(jMenuItemCapture);
 		jMenuFile.add(new JSeparator());
 		jMenuFile.add(jMenuItemExit);
         
+		jMenuPlayerColor.add(jMenuItemRed);
+		jMenuPlayerColor.add(jMenuItemBlue);
+		jMenuPlayerColor.add(jMenuItemGreen);
+		
         jPuzzleMenuBar.add(jMenuFile);
+        jPuzzleMenuBar.add(jMenuPlayerColor);
+        
+        jPuzzleMenuBar.setOpaque(true);
+        jPuzzleMenuBar.setBackground(userColor);        
 
         setJMenuBar(jPuzzleMenuBar);
 	}	
@@ -280,7 +275,11 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 // UISelectionRectHolder Interface Methods
 //
 // ******************************************************************************
-    	
+  
+	public Color getUserColor() {
+		return userColor;
+	}
+	
 // ******************************************************************************
 //
 // events driven action methods (perform*** methods)
@@ -288,6 +287,21 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 // ******************************************************************************
 	private void performWindowClosing(ActionEvent evt) {  
     	this.processWindowEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }       
+
+	private void performRed(ActionEvent evt) {  
+    	userColor = Color.RED;
+        jPuzzleMenuBar.setBackground(userColor); 
+    }       
+
+	private void performBlue(ActionEvent evt) {  
+		userColor = Color.CYAN;
+        jPuzzleMenuBar.setBackground(userColor); 
+    }       
+
+	private void performGreen(ActionEvent evt) {  
+		userColor = Color.GREEN;
+        jPuzzleMenuBar.setBackground(userColor); 
     }       
 
     private void performCheckBoard(ActionEvent evt) {  
@@ -313,11 +327,29 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
         gridArea.repaint();
     }       
 
+
+    public void CheckBoard() {  
+    	performCheckBoard(null);
+    }       
+
+    private void performCapture(ActionEvent evt) {   
+        try {
+            Thread.sleep(1000 * 2);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        
+        if (screen2image.capture(this))
+        	updateLabel("ScreenShot Saved!");
+        else
+        	updateLabel("ScreenCapture Failed!");
+    }       
+    
     private void performFileClose(ActionEvent evt) {  
     	DMPuzzle.clearPuzzle(); 
     	gridArea.repaint();
     	updateLabel("Puzzle Closed");
-    }       
+    }           
 
     private void performFileOpen(ActionEvent evt) {  
     	performFileClose(evt);
@@ -376,11 +408,16 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 // ******************************************************************************	
 	private JMenuBar 	jPuzzleMenuBar = null;
 	private JMenu 		jMenuFile = null;
+	private JMenu 		jMenuPlayerColor = null;
 	private JMenuItem 	jMenuItemNew = null;
 	private JMenuItem 	jMenuItemOpenFile = null;
 	private JMenuItem 	jMenuItemClose = null;
 	private JMenuItem 	jMenuItemBoardCheck = null;
+	private JMenuItem 	jMenuItemCapture = null;
 	private JMenuItem 	jMenuItemExit = null;
+	private JMenuItem 	jMenuItemRed = null;
+	private JMenuItem 	jMenuItemBlue = null;
+	private JMenuItem 	jMenuItemGreen = null;
 	
 	private JPanel topPanel = null;
 	private JPanel bottomPanel = null;

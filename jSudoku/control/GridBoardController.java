@@ -2,6 +2,7 @@ package jSudoku.control;
 
 import jSudoku.model.*;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -283,7 +284,7 @@ public class GridBoardController {
 		 }
 	 }
 	 
-	 public static void setSelectedCellValue(DMPuzzle puzzle, int ascii) {
+	 public static void setSelectedCellValue(DMPuzzle puzzle, int ascii, int color) {
 		 int num = ascii - KeyEvent.VK_0;
 		 
 		 for (DMCell[] cellarray : puzzle.cells) {
@@ -292,6 +293,7 @@ public class GridBoardController {
 					 cell.setValue(num);
 					 cell.setSelected(false);
 					 cell.setFilled(true);
+					 cell.setColorCode(color);
 					 return;
 				 }
 			 }
