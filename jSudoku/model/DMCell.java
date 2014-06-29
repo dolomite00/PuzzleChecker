@@ -44,6 +44,7 @@ package jSudoku.model;
  * We will acknowledge all electronic notifications.
  */
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.Vector;

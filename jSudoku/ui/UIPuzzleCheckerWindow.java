@@ -6,6 +6,7 @@ import jSudoku.model.*;
 import jSudoku.util.screen2image;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -35,6 +36,8 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 	static final long serialVersionUID = 1;
 	
 	public  static Image PROGRAM_ICON_IMG = null;
+	
+	private Color userColor = Color.RED;
 	
 // ******************************************************************************
 //
@@ -126,6 +129,7 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 		jPuzzleMenuBar			= new JMenuBar();
 		
 		jMenuFile			= new JMenu();
+		jMenuPlayerColor	= new JMenu();
 		
 		jMenuItemNew 		= new JMenuItem();
 		jMenuItemOpenFile	= new JMenuItem();
@@ -134,7 +138,12 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 		jMenuItemCapture	= new JMenuItem();
 		jMenuItemExit		= new JMenuItem();
 		
+		jMenuItemRed		= new JMenuItem();
+		jMenuItemBlue		= new JMenuItem();
+		jMenuItemGreen		= new JMenuItem();
+		
 		jMenuFile.setText("Game");
+		jMenuPlayerColor.setText("Player Color");
 		
 		jMenuItemNew.setText("New...");	
 		jMenuItemOpenFile.setText("Open File...");
@@ -142,6 +151,10 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 		jMenuItemBoardCheck.setText("Check Board");	
 		jMenuItemCapture.setText("Capture");	
 		jMenuItemExit.setText("Exit");
+
+		jMenuItemRed.setText("Red");
+		jMenuItemBlue.setText("Blue");
+		jMenuItemGreen.setText("Green");
 
 		jMenuItemNew.setIcon(buildIcon(CONSTVALUE.FILENEW_ICON));
 		jMenuItemOpenFile.setIcon(buildIcon(CONSTVALUE.FILEOPEN_ICON));
@@ -163,6 +176,24 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 		jMenuItemCapture.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				performCapture(evt);
+			}
+		});
+
+		jMenuItemRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				performRed(evt);
+			}
+		});
+
+		jMenuItemBlue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				performBlue(evt);
+			}
+		});
+
+		jMenuItemGreen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				performGreen(evt);
 			}
 		});
 
@@ -194,7 +225,15 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 		jMenuFile.add(new JSeparator());
 		jMenuFile.add(jMenuItemExit);
         
+		jMenuPlayerColor.add(jMenuItemRed);
+		jMenuPlayerColor.add(jMenuItemBlue);
+		jMenuPlayerColor.add(jMenuItemGreen);
+		
         jPuzzleMenuBar.add(jMenuFile);
+        jPuzzleMenuBar.add(jMenuPlayerColor);
+        
+        jPuzzleMenuBar.setOpaque(true);
+        jPuzzleMenuBar.setBackground(userColor);        
 
         setJMenuBar(jPuzzleMenuBar);
 	}	
@@ -236,7 +275,11 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 // UISelectionRectHolder Interface Methods
 //
 // ******************************************************************************
-    	
+  
+	public Color getUserColor() {
+		return userColor;
+	}
+	
 // ******************************************************************************
 //
 // events driven action methods (perform*** methods)
@@ -244,6 +287,21 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 // ******************************************************************************
 	private void performWindowClosing(ActionEvent evt) {  
     	this.processWindowEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }       
+
+	private void performRed(ActionEvent evt) {  
+    	userColor = Color.RED;
+        jPuzzleMenuBar.setBackground(userColor); 
+    }       
+
+	private void performBlue(ActionEvent evt) {  
+		userColor = Color.CYAN;
+        jPuzzleMenuBar.setBackground(userColor); 
+    }       
+
+	private void performGreen(ActionEvent evt) {  
+		userColor = Color.GREEN;
+        jPuzzleMenuBar.setBackground(userColor); 
     }       
 
     private void performCheckBoard(ActionEvent evt) {  
@@ -270,6 +328,10 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
     }       
 
 
+    public void CheckBoard() {  
+    	performCheckBoard(null);
+    }       
+
     private void performCapture(ActionEvent evt) {   
         try {
             Thread.sleep(1000 * 2);
@@ -277,7 +339,10 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
             throw new RuntimeException(e);
         }
         
-        screen2image.capture();
+        if (screen2image.capture(this))
+        	updateLabel("ScreenShot Saved!");
+        else
+        	updateLabel("ScreenCapture Failed!");
     }       
     
     private void performFileClose(ActionEvent evt) {  
@@ -343,12 +408,16 @@ public class UIPuzzleCheckerWindow extends JFrame implements UISelectionRectHold
 // ******************************************************************************	
 	private JMenuBar 	jPuzzleMenuBar = null;
 	private JMenu 		jMenuFile = null;
+	private JMenu 		jMenuPlayerColor = null;
 	private JMenuItem 	jMenuItemNew = null;
 	private JMenuItem 	jMenuItemOpenFile = null;
 	private JMenuItem 	jMenuItemClose = null;
 	private JMenuItem 	jMenuItemBoardCheck = null;
 	private JMenuItem 	jMenuItemCapture = null;
 	private JMenuItem 	jMenuItemExit = null;
+	private JMenuItem 	jMenuItemRed = null;
+	private JMenuItem 	jMenuItemBlue = null;
+	private JMenuItem 	jMenuItemGreen = null;
 	
 	private JPanel topPanel = null;
 	private JPanel bottomPanel = null;
